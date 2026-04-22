@@ -8,22 +8,23 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    env:
-      MINGW_PATH: C:\msys64\mingw64\bin
+    defaults:
+      run:
+        shell: msys2 {0}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-      - name: Add MinGW to PATH
-        shell: pwsh
-        run: Add-Content $env:GITHUB_PATH "C:\msys64\mingw64\bin"
+      - name: Setup MSYS2 and MinGW
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: false
+          install: mingw-w64-x86_64-gcc
       - name: Compile
-        shell: pwsh
-        run: >
-          & "C:\msys64\mingw64\bin\g++.exe"
-          -std=c++17 -O2 -static -static-libgcc -static-libstdc++ -o Synergy.exe main.cpp
+        run: g++ -std=c++17 -O2 -static -static-libgcc -static-libstdc++ -o app.exe main.cpp
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Synergy-windows-portable
-          path: Synergy.exe
+          name: app-windows-portable
+          path: app.exe
           retention-days: 30
