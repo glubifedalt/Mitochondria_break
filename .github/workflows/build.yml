@@ -19,12 +19,12 @@ jobs:
         with:
           msystem: MINGW64
           update: false
-          install: mingw-w64-x86_64-gcc
+          install: mingw-w64-x86_64-gcc mingw-w64-x86_64-fmt mingw-w64-x86_64-sqlite3 mingw-w64-x86_64-nlohmann-json mingw-w64-x86_64-glfw mingw-w64-x86_64-zlib mingw-w64-x86_64-curl mingw-w64-x86_64-wil mingw-w64-x86_64-boost mingw-w64-x86_64-openssl mingw-w64-x86_64-SDL2
       - name: Compile
-        run: g++ -std=c++17 -O2 -static -static-libgcc -static-libstdc++ -o app.exe main.cpp
+        run: g++ -std=c++17 -O2 -static -static-libgcc -static-libstdc++ -o Synergy_tool.exe main.cpp
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-windows-portable
-          path: app.exe
+          name: Synergy_tool-windows-portable
+          path: Synergy_tool.exe
           retention-days: 30
