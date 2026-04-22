@@ -8,18 +8,22 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    env:
+      MINGW_PATH: C:\msys64\mingw64\bin
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Add MinGW to PATH
         shell: pwsh
-        run: echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        run: Add-Content $env:GITHUB_PATH "C:\msys64\mingw64\bin"
       - name: Compile
-        shell: cmd
-        run: "g++ -static -static-libgcc -static-libstdc++ -std=c++17 -O2 -o synergy.exe main.cpp"
+        shell: pwsh
+        run: >
+          & "C:\msys64\mingw64\bin\g++.exe"
+          -std=c++17 -O2 -static -static-libgcc -static-libstdc++ -o Synergy.exe main.cpp
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: synergy-windows-portable
-          path: synergy.exe
+          name: Synergy-windows-portable
+          path: Synergy.exe
           retention-days: 30
